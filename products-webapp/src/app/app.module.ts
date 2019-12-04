@@ -1,7 +1,8 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { NgModule, Injector, DoBootstrap } from '@angular/core';
 
-import { AppRoutingModule } from './app-routing.module';
+import { createCustomElement } from '@angular/elements';
+
 import { AppComponent } from './app.component';
 
 @NgModule({
@@ -9,10 +10,19 @@ import { AppComponent } from './app.component';
     AppComponent
   ],
   imports: [
-    BrowserModule,
-    AppRoutingModule
+    BrowserModule
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  // bootstrap: [AppComponent]
+  entryComponents: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+
+  constructor(private injector: Injector){}
+
+  ngDoBootstrap(){
+    const el = createCustomElement(AppComponent, {injector: this.injector});
+    customElements.define('products-webapp', el);
+  }
+
+}
